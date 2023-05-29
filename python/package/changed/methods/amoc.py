@@ -1,4 +1,4 @@
-from ../core/split import split
+from ..core.split import split
 
 def amoc(f,R,beta) :
     a,b = min(R),max(R)
