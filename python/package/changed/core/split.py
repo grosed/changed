@@ -1,5 +1,5 @@
 from .point_function import point_function
 
 def split(f,R) :
-    ra,rb = min(R),max(R)
-    return min([(r,f(ra,r) + f(r,rb)) for r in R],key = lambda x : x[1])
+    a,d = min(R),max(R)
+    return min([(a,f(a,d))] + [(c,f(a,b) + f(c,d)) for b,c in zip(R[:-1],R[1:])],key = lambda x : x[1])
