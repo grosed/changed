@@ -1,1 +1,1 @@
-from . import blob
+from .blob import blob
