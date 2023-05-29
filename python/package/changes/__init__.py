@@ -1,1 +1,1 @@
-from .core import point_function
+from .core/point_function import point_function
