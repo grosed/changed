@@ -1,1 +1,1 @@
-from .changes.blob import glob
+from .blob import glob
