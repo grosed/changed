@@ -1,3 +1,5 @@
+from ../core/split import split
+
 def amoc(f,R,beta) :
     a,b = min(R),max(R)
     index,cost = split(f,f,R)
