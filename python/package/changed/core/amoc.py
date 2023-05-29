@@ -1,6 +1,7 @@
 from .split import split
 from .add import add
 
-def amoc(g,R,beta) :
-    def f(i,j) : return 0 if i == j else g(i,j-1) + beta
-    return split(add(f,g),R)
+def amoc(f,R,beta) :
+    a,b = min(R),max(R)
+    index,cost = split(f,R)
+    return (index,cost + beta) if cost + beta < f(a,b) else (a,cost)
