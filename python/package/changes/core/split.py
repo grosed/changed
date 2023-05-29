@@ -1,3 +1,4 @@
+from .point_function import point_function
 
 def split(f,R) :
     ra,rb = min(R),max(R)
