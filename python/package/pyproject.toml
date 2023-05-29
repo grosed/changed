@@ -16,8 +16,7 @@ classifiers = [
     "License :: OSI Approved :: GPL-3.0-only",
     "Operating System :: OS Independent",
 ]
-dependencies = [
-'itertools',
+dependencies = [,
 ]
 
 [project.urls]
