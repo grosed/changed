@@ -1,3 +1,5 @@
+from ...core.point_function import point_function
+
 class sop_state :
     def __init__(self) :
         self.a = None
