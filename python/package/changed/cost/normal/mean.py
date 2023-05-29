@@ -1,5 +1,3 @@
-from itertools import accumulate
-
 class mean :
     def __init__(self,X,minseglen=0) :
         self.X = X
