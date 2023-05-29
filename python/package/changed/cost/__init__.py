@@ -1,1 +1,1 @@
-from .changed.normal.mean import mean
+from .normal.mean import mean
