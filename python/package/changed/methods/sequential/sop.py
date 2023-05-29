@@ -15,6 +15,7 @@ def sop(S,g,R,beta) :
         S.a = min(R)
         S.cost = -beta
         for r in R :
+            print(r)
             S.fstar.union({(r,S.cost + beta)})
             S.T.append(r)
             index,S.cost = split(S.f,g,S.T)
