@@ -1,12 +1,12 @@
-# <u> seqstats </u> - Algorithms for Sequential Calculation of Common Statistics </u>
+# <u> seqstats </u> A collection of methods for detecting changes in data. </u>
 
-## Installing the seqstats python package
+## Installing the changes python package
 
 ### using pip
 
 #### installing from github with pip
 
-python -m pip install 'git+https<area>://github.com/grosed/changes/#egg=seqstats&subdirectory=python/package'
+python -m pip install 'git+https<area>://github.com/grosed/changes/#egg=changes&subdirectory=python/package'
 
 ## Testing
 
