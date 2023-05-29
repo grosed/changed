@@ -1,1 +1,1 @@
-from . import mean
+from .mean import mean
