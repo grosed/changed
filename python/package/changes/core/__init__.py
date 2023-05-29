@@ -1,1 +1,1 @@
-from .core import split,point_function,add,amoc
+from . import split,point_function,add,amoc
