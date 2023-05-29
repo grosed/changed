@@ -1,4 +1,4 @@
-# <u> seqstats </u> A collection of methods for detecting changes in data. </u>
+# <u> changes </u> <u> A collection of methods for detecting changes in data. </u>
 
 ## Installing the changes python package
 
