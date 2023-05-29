@@ -1,2 +1,2 @@
-def blob(x) :
+def glob(x) :
     return 2*x
