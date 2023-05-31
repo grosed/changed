@@ -1,4 +1,5 @@
 from itertools import accumulate
+from math import inf
 
 class mean :
     def __init__(self,X,minseglen=0) :
