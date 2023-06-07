@@ -8,15 +8,14 @@ class sop_state :
         self.f = lambda i,j : self.fstar(j)
         self.s = point_function()
         self.T = []
-        self.cost = None
 
 def sop(S,g,R,beta) :
-    if S.cost == None :
+    if S.a == None :
         S.a = min(R)
-        S.cost = 0.0
     for r in R :
-        S.fstar.union({(r,S.cost + beta)})
+        S.fstar.union({(r,g(S.a,r)})
         S.T.append(r)
-        index,S.cost = split(S.f,g,S.T)
-        S.s.union({(r,(index,S.cost))})
+        index,cost = split(S.f,g,S.T)
+        S.fstar.union({(r,cost + beta})           
+        S.s.union({(r,(index,cost))})
     return S
