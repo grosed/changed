@@ -13,7 +13,7 @@ class sop_state :
 def sop(S,g,R,beta) :
     if S.cost == None :
         S.a = min(R)
-        S.cost = -beta
+        S.cost = 0.0
     for r in R :
         S.fstar.union({(r,S.cost + beta)})
         S.T.append(r)
