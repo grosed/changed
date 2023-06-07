@@ -13,7 +13,7 @@ def sop(S,g,R,beta) :
     if S.a == None :
         S.a = min(R)
     for r in R :
-        S.fstar.union({(r,g(S.a,r)})
+        S.fstar.union({(r,g(S.a,r))})
         S.T.append(r)
         index,cost = split(S.f,g,S.T)
         S.fstar.union({(r,cost + beta})           
