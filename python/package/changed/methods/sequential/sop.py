@@ -16,6 +16,6 @@ def sop(S,g,R,beta) :
         S.fstar.union({(r,g(S.a,r))})
         S.T.append(r)
         index,cost = split(S.f,g,S.T)
-        S.fstar.union({(r,cost + beta})           
+        S.fstar.union({(r,cost + beta)})           
         S.s.union({(r,(index,cost))})
     return S
