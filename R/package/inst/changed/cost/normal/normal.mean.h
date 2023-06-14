@@ -1,6 +1,7 @@
 #ifndef ___NORMAL_MEAN_H___
 #define ___NORMAL_MEAN_H___
 
+
 #include <vector>
 
 #include "sumstats.h"
