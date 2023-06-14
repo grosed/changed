@@ -12,10 +12,10 @@ namespace changed
   {
       template <typename Ftype>
       // requires std::invocable<Ftype,const int&, const int&>
-      std::vector<int> op_pruned(const std::vector<double>& X,const double& beta)
+      std::vector<int> op_pruned(const Ftype& cf,
+				 const double& beta,
+				 const int& n)
       {
-	Ftype cf(X);
-	int n = X.size();
 	std::vector<double> F(n+1);
 	F[0] = -beta;
 	std::vector<int>  cpts(n);
