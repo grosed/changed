@@ -57,6 +57,7 @@ struct np_conditional
   np_conditional();
   void set(const std::vector<double>&,const double&);
   std::vector<double> costs(const std::list<std::vector<int> >&) const;
+  std::vector<double> sumstats(const int&, const int&) const; 
 };
 
 
@@ -79,6 +80,11 @@ std::vector<double> np_conditional::costs(const std::list<std::vector<int> >& IJ
 }
 
 
+std::vector<double> np_conditional::sumstats(const int& i, const int& j) const
+{
+  return (*sp_cf).sumstats(i,j);
+}
+
 
 
 RCPP_MODULE(changed){
@@ -94,6 +100,7 @@ RCPP_MODULE(changed){
       .constructor()
       .method("costs", &np_conditional::costs , "get costs")
       .method("set", &np_conditional::set , "set data")
+      .method("sumstats", &np_conditional::sumstats , "get sumstats")
     ;
 }
  
