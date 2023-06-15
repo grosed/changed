@@ -1,3 +1,4 @@
 useDynLib(changed, .registration=TRUE)
 import(methods, Rcpp)
 exportPattern("^[[:alpha:]]+")
+exportMethods(changepoints)
