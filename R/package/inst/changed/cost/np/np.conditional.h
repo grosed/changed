@@ -5,7 +5,6 @@
 #include <cmath>
 #include <limits>
 
-#include <iostream>
 
 namespace changed
 {
@@ -39,7 +38,6 @@ namespace changed
 	      auto pk = std::pow(1 + std::exp(c*yk),-1);
 	      auto Ik = (Rtype)((n-1)*pk + 1);
 	      I[k-i-1] = Ik;
-	      // I[i] = (Rtype)((n-1)*std::pow(1 + std::exp(c*yk),-1)+1);
 	    }
 	  // calculate quantiles
 	  std::vector<Ctype> Q(k+2);
@@ -95,44 +93,7 @@ namespace changed
 			 );
 	  auto val = std::accumulate(M.begin(),M.end(),0.0);
 	  return val;
-	}
-
-
-      template <typename Rtype,typename Ctype>
-	std::vector<Ctype> conditional_template<Rtype,Ctype>::sumstats(const Rtype& i,const Rtype& j) const
-	{
-	  Ctype t = (Ctype)(j - i + 1);
-	  std::vector<Ctype> M(S[0].size());
-	  //std::cout << i << " : " << j << " : ";
-	  std::transform(std::begin(S[j]),std::end(S[j]),std::begin(S[i-1]),std::begin(M),
-			 [&t](const auto& a, const auto& b)
-			 {
-			   auto m = a - b;
-			   double val;
-			   if(m == 0 || m == t)
-			     {
-			       val =  0.0;
-			     }
-			   else
-			     {
-			       // val = -m*std::log(m/t);
-			       val = m;
-			     }
-			   //		   std::cout << m << " -- " << t << " -- " << val << ",";
-			   return val;
-			 }
-			 );
-	  //std::cout << std::endl;
-	  return M;
-	  /*
-	  auto val = std::accumulate(M.begin(),M.end(),0.0);
-	  // std::cout << i << " : " << j << " : " << val << std::endl;
-	  return val;
-	  */
-	}
-
-
-      
+	}      
       typedef conditional_template<int,double> conditional;
     } // namespace normal
   } // namespace cost
