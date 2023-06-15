@@ -29,7 +29,7 @@ struct normal_mean
   std::shared_ptr<changed::cost::normal::mean> sp_cf;
   normal_mean();
   void set(const std::vector<double>&);
-  std::vector<double> costs(const std::list<std::vector<int> >&) const;
+  double cost(const int&, const int&) const;
 };
 
 
@@ -40,15 +40,9 @@ void normal_mean::set(const std::vector<double>& X)
   sp_cf = std::shared_ptr<changed::cost::normal::mean>(new changed::cost::normal::mean(X));
 }
 
-std::vector<double> normal_mean::costs(const std::list<std::vector<int> >& IJ) const
+double normal_mean::cost(const int& i,const int& j) const
 {
-  std::vector<double> result(IJ.size());
-  int idx = 0;
-  for(const auto& ij : IJ)
-    {
-      result[idx++] = (*sp_cf)(ij[0],ij[1]);      
-    }
-  return result;
+  return (*sp_cf)(i,j);      
 }
 
 struct np_conditional
@@ -57,7 +51,7 @@ struct np_conditional
   np_conditional();
   void set(const std::vector<double>&,const double&);
   std::vector<double> costs(const std::list<std::vector<int> >&) const;
-  std::vector<double> sumstats(const int&, const int&) const; 
+  double cost(const int&, const int&) const; 
 };
 
 
@@ -68,21 +62,9 @@ void np_conditional::set(const std::vector<double>& X, const double& k)
   sp_cf = std::shared_ptr<changed::cost::np::conditional>(new changed::cost::np::conditional(X,k));
 }
 
-std::vector<double> np_conditional::costs(const std::list<std::vector<int> >& IJ) const
+double np_conditional::cost(const int& i, const int& j) const
 {
-  std::vector<double> result(IJ.size());
-  int idx = 0;
-  for(const auto& ij : IJ)
-    {
-      result[idx++] = (*sp_cf)(ij[0],ij[1]);      
-    }
-  return result;
-}
-
-
-std::vector<double> np_conditional::sumstats(const int& i, const int& j) const
-{
-  return (*sp_cf).sumstats(i,j);
+  return (*sp_cf)(i,j);
 }
 
 
@@ -93,14 +75,13 @@ RCPP_MODULE(changed){
     function("cpt_np_conditional_impl",&cpt_np_conditional_impl,"");
     class_<normal_mean>("normal_mean")
       .constructor()
-      .method("costs", &normal_mean::costs , "get costs")
+      .method("cost", &normal_mean::cost , "get cost")
       .method("set", &normal_mean::set , "set data")
     ;
     class_<np_conditional>("np_conditional")
       .constructor()
-      .method("costs", &np_conditional::costs , "get costs")
+      .method("cost", &np_conditional::cost , "get cost")
       .method("set", &np_conditional::set , "set data")
-      .method("sumstats", &np_conditional::sumstats , "get sumstats")
     ;
 }
  
