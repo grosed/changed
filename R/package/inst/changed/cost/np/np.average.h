@@ -1,5 +1,5 @@
-#ifndef ___NP_CONDITIONAL_H___
-#define ___NP_CONDITIONAL_H___
+#ifndef ___NP_AVERAGE_H___
+#define ___NP_AVERAGE_H___
 
 #include <vector>
 #include <cmath>
@@ -12,21 +12,19 @@ namespace changed
     namespace np
     {      
       template <typename Rtype,typename Ctype>
-	struct conditional_template
+	struct average_template
 	{
 	  std::vector<std::vector<Ctype> > S;
-	  conditional_template(const std::vector<Ctype>&, const std::vector<Ctype>&);
-	  Ctype operator()(const Rtype&,const Rtype&) const;
-
-	  std::vector<Ctype> sumstats(const Rtype&,const Rtype&) const;
-	  
+	  average_template(const std::vector<Ctype>&, const std::vector<Ctype>&);
+	  int n;
+	  Ctype operator()(const Rtype&,const Rtype&) const;	  
 	};
       
       template <typename Rtype,typename Ctype>
-      conditional_template<Rtype,Ctype>::conditional_template(const std::vector<Ctype>& X,
+      average_template<Rtype,Ctype>::average_template(const std::vector<Ctype>& X,
 							      const std::vector<Ctype>& Q)
 	{
-	  auto n = X.size();
+	  n = X.size();
 	  auto XS = X;
 	  std::sort(std::begin(XS),std::end(XS));
 	  S = std::vector<std::vector<Ctype> >(n+1);
@@ -35,10 +33,12 @@ namespace changed
 	  for(int i = 1; i <= n; i++)
 	    {
 	      S[i] = std::vector<Ctype>(Q.size()-1);
-	      std::transform(std::begin(Q) + 1,std::end(Q),std::begin(Q),std::begin(S[i]),
-			     [&X,&i](const auto& b,const auto& a)
+	      std::transform(std::begin(Q),std::end(Q)-1,std::begin(S[i]),
+			     [&X,&i](const auto& a)
 			     {
-			       return 1 ? a < X[i-1] && X[i-1] <= b : 0;
+			       if(a < X[i-1]) return 1.0;
+			       if(a == X[i-1]) return 0.5;
+			       return 0.0;
 			     }
 			     );
 	    }
@@ -54,7 +54,7 @@ namespace changed
 
       
       template <typename Rtype,typename Ctype>
-	Ctype conditional_template<Rtype,Ctype>::operator()(const Rtype& i,const Rtype& j) const
+	Ctype average_template<Rtype,Ctype>::operator()(const Rtype& i,const Rtype& j) const
 	{
 	  
 	  Ctype t = (Ctype)(j - i + 1);
@@ -70,15 +70,15 @@ namespace changed
 			     }
 			   else
 			     {
-			       val = -m*std::log(m/t);
+			       val = -m*std::log(m/t) - (t-m)*std::log(1-m/t);
 			     }
 			   return val;
 			 }
 			 );
-	  auto val = std::accumulate(M.begin(),M.end(),0.0);
+	  auto val = 2*std::log(2*n-1)*std::accumulate(M.begin(),M.end(),0.0)/n;
 	  return val;
 	}      
-      typedef conditional_template<int,double> conditional;
+      typedef average_template<int,double> average;
     } // namespace np
   } // namespace cost
 } // namespace changed
