@@ -11,6 +11,7 @@
 #include "normal.mean.h"
 #include "np.conditional.h"
 #include "np.average.h"
+#include "np.max.h"
 #include "op.pruned.h"
 
 
@@ -69,6 +70,14 @@ std::vector<int> cpt_np_average_impl(const std::vector<double>& X,
 {
   changed::cost::np::average cf(X,Q);
   return run_method(changed::methods::op_pruned<changed::cost::np::average>,cf,beta,X.size());
+}
+
+std::vector<int> cpt_np_max_impl(const std::vector<double>& X,
+				     const std::vector<double>& Q,
+				     const double& beta)
+{
+  changed::cost::np::max cf(X,Q);
+  return run_method(changed::methods::op_pruned<changed::cost::np::max>,cf,beta,X.size());
 }
 
 
@@ -137,11 +146,35 @@ double np_average::cost(const int& i, const int& j) const
 }
 
 
+
+struct np_max
+{
+  std::shared_ptr<changed::cost::np::max> sp_cf;
+  np_max();
+  void set(const std::vector<double>&,const std::vector<double>&);
+  double cost(const int&, const int&) const; 
+};
+
+
+np_max::np_max() {}
+
+void np_max::set(const std::vector<double>& X, const std::vector<double>& Q)
+{
+  sp_cf = std::shared_ptr<changed::cost::np::max>(new changed::cost::np::max(X,Q));
+}
+
+double np_max::cost(const int& i, const int& j) const
+{
+  return (*sp_cf)(i,j);
+}
+
+
 RCPP_MODULE(changed){
     using namespace Rcpp;
     function("cpt_normal_mean_impl",&cpt_normal_mean_impl,"");
     function("cpt_np_conditional_impl",&cpt_np_conditional_impl,"");
-    function("cpt_np_average_impl",&cpt_np_conditional_impl,"");
+    function("cpt_np_average_impl",&cpt_np_average_impl,"");
+    function("cpt_np_max_impl",&cpt_np_max_impl,"");
     class_<normal_mean>("normal_mean")
       .constructor()
       .method("cost", &normal_mean::cost , "get cost")
@@ -156,6 +189,11 @@ RCPP_MODULE(changed){
       .constructor()
       .method("cost", &np_average::cost , "get cost")
       .method("set", &np_average::set , "set data")
+      ;
+    class_<np_max>("np_max")
+      .constructor()
+      .method("cost", &np_max::cost , "get cost")
+      .method("set", &np_max::set , "set data")
       ;
 }
  
