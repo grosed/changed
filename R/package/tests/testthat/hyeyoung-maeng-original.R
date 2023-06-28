@@ -47,6 +47,48 @@ PELT_c_with_penalty = function (x, qnt, penalty) {
 }
 
 
+### Haynes et al (2017)
+PELT_with_penalty = function (x, qnt, penalty) {
+  
+  # initialization
+  K = length(qnt)
+  
+  C = costMatrix(x, qnt)
+  
+  N = length(x)
+  
+  # penalty = thr.c*log(N)
+  
+  Fvec = rep(0, N + 1)
+  Fvec[1] = -penalty
+  cngPoints = list(NULL) # initializing a null list
+  Rvec = 0
+  
+  for (t in 1:N) {
+    
+    # compute all the costs up to time t
+    meanC <- -2*log(2*N-1)*colMeans(-C[, (Rvec + 1), t, drop=F])
+    partitionsCosts = Fvec[Rvec + 1] + meanC + penalty
+    
+    # get the new F(t) and its relative changepoint between R
+    Fvec[(t) + 1] = min(partitionsCosts)
+    cngPoint = Rvec[which.min(partitionsCosts)]
+    cngPoints[[t+1]] = c(cngPoints[[cngPoint + 1]], cngPoint + 1)
+    
+    # make a vector of the same lenth to filter based on F(t)
+    filter = (Fvec[Rvec + 1] + meanC) <= Fvec[(t) + 1]
+    #print(c(filter))
+    
+    # append the new time to values in R that meet the condition
+    # Rvec = c(Rvec[filter], t)
+    Rvec = c(Rvec, t)
+  }
+  
+  return(cngPoints[[N]][-1])
+  
+}
+
+
 
 
 ### a sequence of quantiles

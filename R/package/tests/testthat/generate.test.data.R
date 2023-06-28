@@ -1,4 +1,6 @@
 
+library(changepoint)
+
 ## import original code 
 source("hyeyoung-maeng-original.R")
 
@@ -35,7 +37,7 @@ for(alpha in alphas)
   test.data[[key]] <- PELT(x, qnt=qnt, thr.c=3*alpha)
 }
 
-## generate test data for np.average
+## generate test data for np.max
 key.root <- "max-alpha="
 for(alpha in alphas)
 {
@@ -43,7 +45,7 @@ for(alpha in alphas)
   test.data[[key]] <- PELT_max(x, qnt=qnt, thr.c=1*alpha)
 }
 
-## generate test data for np.average
+## generate test data for np.conditional
 key.root <- "conditional-alpha="
 for(alpha in alphas)
 {
@@ -52,8 +54,20 @@ for(alpha in alphas)
 }
 
 
+## generate test data for normal.mean
+key.root <- "normal-mean-beta="
+betas <- 2*log(length(x))*seq(0.1,1.0,0.1)
+for(beta in betas)
+{
+  key <- paste(key.root,beta,sep="")
+  test.data[[key]] <-  cpt.mean(x,penalty="Manual",method="PELT",pen.value=beta)@cpts
+}
+
+
 ## serialise the dictionary
 save(test.data,file="test.data.RData")
+
+
 
 
 
