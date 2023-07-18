@@ -26,7 +26,7 @@ namespace changed
 	{
 	  n = X.size();
 	  S = std::vector<std::vector<Ctype> >(n+1);
-	  S[0] = std::vector<Ctype>(Q.size()-1,0);	  
+	  S[0] = std::vector<Ctype>(Q.size()-2,0);	  
 	  // indicate
 	  for(int i = 1; i <= n; i++)
 	    {
