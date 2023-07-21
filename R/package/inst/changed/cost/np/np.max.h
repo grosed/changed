@@ -56,10 +56,7 @@ namespace changed
       template <typename Rtype,typename Ctype>
 	Ctype max_template<Rtype,Ctype>::operator()(const Rtype& i,const Rtype& j) const
 	{	  
-          if(j == 1)
-	  {
-		  std::cout << "1" << std::endl;
-	  }
+	std::cout << i << std::endl;
 	  Ctype t = (Ctype)(j - i + 1);
 	  std::vector<Ctype> M(S[0].size());
 	  std::transform(std::begin(S[j]),std::end(S[j]),std::begin(S[i-1]),std::begin(M),
