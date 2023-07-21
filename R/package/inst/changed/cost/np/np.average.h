@@ -31,7 +31,7 @@ namespace changed
 	  for(int i = 1; i <= n; i++)
 	    {
 	      S[i] = std::vector<Ctype>(Q.size()-1);
-	      std::transform(std::begin(Q)+1,std::end(Q)-1,std::begin(S[i]),
+	      std::transform(std::begin(Q)+1,std::end(Q),std::begin(S[i]),
 			     [&X,&i](const auto& a)
 			     {
 			       if(X[i-1] < a) return 1.0;
