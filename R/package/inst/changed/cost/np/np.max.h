@@ -31,19 +31,17 @@ namespace changed
 	  for(int i = 1; i <= n; i++)
 	    {
 	      S[i] = std::vector<Ctype>(Q.size()-1);
-	      std::transform(std::begin(Q)+1,std::end(Q)-1,std::begin(S[i]),
+	      std::transform(std::begin(Q)+1,std::end(Q),std::begin(S[i]),
 			     [&X,&i](const auto& a)
 			     {
-			       if(X[i-1] < a) return 1.0;
-			       if(X[i-1] == a) return 0.5;
-			       return 0.0;
+			       return 1 ? a < X[i-1] && X[i-1] <= b : 0;
 			     }
 			     );
 	    }
 	  // accumalate 
 	  for(int i = 0; i < n; i++)
 	    {
-	      for(int j = 0; j < Q.size()-2; j++)
+	      for(int j = 0; j < Q.size()-1; j++)
 		{
 		  S[i+1][j] += S[i][j]; 
 		}
