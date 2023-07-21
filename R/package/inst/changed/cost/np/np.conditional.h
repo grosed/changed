@@ -68,7 +68,7 @@ namespace changed
 			     }
 			   else
 			     {
-			       val = -m*std::log(m/t);
+			       val = -m*std::log(m/t) - (t-m)*std::log(1-m/t);
 			     }
 			   return val;
 			 }
