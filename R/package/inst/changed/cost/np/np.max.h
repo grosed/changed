@@ -24,15 +24,16 @@ namespace changed
       max_template<Rtype,Ctype>::max_template(const std::vector<Ctype>& X,
 							      const std::vector<Ctype>& Q)
 	{
-	  n = X.size();
+
+	  auto n = X.size();
 	  S = std::vector<std::vector<Ctype> >(n+1);
 	  S[0] = std::vector<Ctype>(Q.size()-1,0);	  
 	  // indicate
 	  for(int i = 1; i <= n; i++)
 	    {
 	      S[i] = std::vector<Ctype>(Q.size()-1);
-	      std::transform(std::begin(Q)+1,std::end(Q),std::begin(S[i]),
-			     [&X,&i](const auto& a)
+	      std::transform(std::begin(Q) + 1,std::end(Q),std::begin(Q),std::begin(S[i]),
+			     [&X,&i](const auto& b,const auto& a)
 			     {
 			       return 1 ? a < X[i-1] && X[i-1] <= b : 0;
 			     }
