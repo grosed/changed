@@ -72,7 +72,7 @@ namespace changed
 			   return val;
 			 }
 			 );
-	  auto val = 2*std::log(2*n-1)*std::accumulate(M.begin(),M.end(),0.0)/(Q.size()-2);
+	  auto val = 2*std::log(2*n-1)*std::accumulate(M.begin(),M.end(),0.0)/(M.size()-1);
 	  return val;
 	  
 	}      
