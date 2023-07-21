@@ -26,7 +26,7 @@ namespace changed
 	{
 	  n = X.size();
 	  S = std::vector<std::vector<Ctype> >(n+1);
-	  S[0] = std::vector<Ctype>(Q.size()-2,0);	  
+	  S[0] = std::vector<Ctype>(Q.size()-1,0);	  
 	  // indicate
 	  for(int i = 1; i <= n; i++)
 	    {
@@ -72,7 +72,7 @@ namespace changed
 			   return val;
 			 }
 			 );
-	  auto val = 2*std::log(2*n-1)*std::accumulate(M.begin(),M.end(),0.0)/M.size();
+	  auto val = 2*std::log(2*n-1)*std::accumulate(M.begin(),M.end(),0.0)/(Q.size()-2);
 	  return val;
 	  
 	}      
