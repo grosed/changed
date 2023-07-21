@@ -56,7 +56,7 @@ namespace changed
       template <typename Rtype,typename Ctype>
 	Ctype max_template<Rtype,Ctype>::operator()(const Rtype& i,const Rtype& j) const
 	{	  
-          if(i == 1)
+          if(j == 1)
 	  {
 		  std::cout << "1" << std::endl;
 	  }
