@@ -5,8 +5,6 @@
 #include <cmath>
 #include <limits>
 
-#include <iostream>
-
 namespace changed
 {
   namespace cost
@@ -56,7 +54,6 @@ namespace changed
       template <typename Rtype,typename Ctype>
 	Ctype max_template<Rtype,Ctype>::operator()(const Rtype& i,const Rtype& j) const
 	{	  
-		std::cout << i << " : " << j << std::endl;
 	  Ctype t = (Ctype)(j - i + 1);
 	  std::vector<Ctype> M(S[0].size());
 	  std::transform(std::begin(S[j]),std::end(S[j]),std::begin(S[i-1]),std::begin(M),
