@@ -24,25 +24,26 @@ namespace changed
       max_template<Rtype,Ctype>::max_template(const std::vector<Ctype>& X,
 							      const std::vector<Ctype>& Q)
 	{
-
-	  auto n = X.size();
+	  n = X.size();
 	  S = std::vector<std::vector<Ctype> >(n+1);
 	  S[0] = std::vector<Ctype>(Q.size()-1,0);	  
 	  // indicate
 	  for(int i = 1; i <= n; i++)
 	    {
 	      S[i] = std::vector<Ctype>(Q.size()-1);
-	      std::transform(std::begin(Q) + 1,std::end(Q),std::begin(Q),std::begin(S[i]),
-			     [&X,&i](const auto& b,const auto& a)
+	      std::transform(std::begin(Q)+1,std::end(Q)-1,std::begin(S[i]),
+			     [&X,&i](const auto& a)
 			     {
-			       return 1 ? a < X[i-1] && X[i-1] <= b : 0;
+			       if(X[i-1] < a) return 1.0;
+			       if(X[i-1] == a) return 0.5;
+			       return 0.0;
 			     }
 			     );
 	    }
 	  // accumalate 
 	  for(int i = 0; i < n; i++)
 	    {
-	      for(int j = 0; j < Q.size()-1; j++)
+	      for(int j = 0; j < Q.size()-2; j++)
 		{
 		  S[i+1][j] += S[i][j]; 
 		}
@@ -57,7 +58,7 @@ namespace changed
 	  std::vector<Ctype> M(S[0].size());
 	  std::transform(std::begin(S[j]),std::end(S[j]),std::begin(S[i-1]),std::begin(M),
 			 [&t](const auto& a, const auto& b)
-			 {
+		         {
 			   auto m = a - b;
 			   double val;
 			   if(m == 0 || m == t)
@@ -66,9 +67,9 @@ namespace changed
 			     }
 			   else
 			     {
-			       val = -m*std::log(m/t);
+			       val = -m*std::log(m/t) - (t-m)*std::log(1-m/t);
 			     }
-			   return val;
+			   return val; 
 			 }
 			 );
 	  auto val = 2*(*std::max_element(M.begin(),M.end()));
