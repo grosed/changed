@@ -54,7 +54,7 @@ namespace changed
       template <typename Rtype,typename Ctype>
 	Ctype average_template<Rtype,Ctype>::operator()(const Rtype& i,const Rtype& j) const
 	{	  
-	  if(i == j)
+	  if(j <= i)
 	  {
 	     return 0.0;
 	  }
