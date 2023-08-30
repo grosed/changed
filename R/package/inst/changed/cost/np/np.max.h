@@ -77,10 +77,10 @@ namespace changed
 			 }
 			 );
 	  auto val = 2*(*std::max_element(M.begin(),M.end()));
-	  if(val < 0.0)
-	  {
-	     val = 0.0;
-	  }
+	  //if(val < 0.0)
+	 // {
+	  //   val = 0.0;
+	 // }
 	  return val;
 	  
 	}      
