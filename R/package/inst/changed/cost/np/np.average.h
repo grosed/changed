@@ -54,6 +54,10 @@ namespace changed
       template <typename Rtype,typename Ctype>
 	Ctype average_template<Rtype,Ctype>::operator()(const Rtype& i,const Rtype& j) const
 	{	  
+	  if(i == j)
+	  {
+	     return 0.0;
+	  }
 	  Ctype t = (Ctype)(j - i + 1);
 	  std::vector<Ctype> M(S[0].size());
 	  std::transform(std::begin(S[j]),std::end(S[j]),std::begin(S[i-1]),std::begin(M),
