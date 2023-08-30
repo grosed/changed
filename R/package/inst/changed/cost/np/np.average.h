@@ -73,6 +73,10 @@ namespace changed
 			 }
 			 );
 	  auto val = 2*std::log(2*n-1)*std::accumulate(M.begin(),M.end(),0.0)/(M.size()-1);
+          if(val < 0.0)
+	  {
+              val = 0.0;
+	  }
 	  return val;
 	  
 	}      
