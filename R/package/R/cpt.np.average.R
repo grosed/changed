@@ -1,7 +1,9 @@
 
-cpt.np.average <- function(X,Q,beta)
+cpt.np.average <- function(data,quantiles,penalty)
 {
-   
-   changepoints <- cpt_np_average_impl(X,Q,beta)
-   return(cpt.np.average.class(X,Q,beta,changepoints))
+    model <- new(np_average)
+    model$setcost(data,quantiles)
+    model$setpenalty(penalty)
+    results <- create_results(model)
+    return(cpt.np.class(data,penalty,results,quantiles,"non parametric (average method)"))
 }

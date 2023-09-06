@@ -49,152 +49,86 @@ std::vector<int> run_method(Ftype& f,Args... args)
 }
 
 
-std::vector<int> cpt_normal_mean_impl(const std::vector<double>& X,const double& beta)
+template <typename cftype>
+struct model
 {
-  changed::cost::normal::mean cf(X);
-  return run_method(changed::methods::op_pruned<changed::cost::normal::mean>,cf,beta,X.size());
-}
+  int m_n;
+  double m_penalty;
+  std::shared_ptr<cftype> m_sp_cf;
 
+  model() {};
+  
+  template <typename Arg1, typename... Args>
+  void setcost(const Arg1& data, Args... args)
+  {
+    m_n = data.size();
+    m_sp_cf = std::shared_ptr<cftype>(new cftype(data,args...));
+  }
 
-std::vector<int> cpt_np_conditional_impl(const std::vector<double>& X,
-					 const std::vector<double>& Q,
-					 const double& beta)
-{
-  changed::cost::np::conditional cf(X,Q);
-  return run_method(changed::methods::op_pruned<changed::cost::np::conditional>,cf,beta,X.size());
-}
+  void setpenalty(const double& penalty)
+  {
+    m_penalty = penalty;
+  }
 
-std::vector<int> cpt_np_average_impl(const std::vector<double>& X,
-				     const std::vector<double>& Q,
-				     const double& beta)
-{
-  changed::cost::np::average cf(X,Q);
-  return run_method(changed::methods::op_pruned<changed::cost::np::average>,cf,beta,X.size());
-}
+  double penalty()
+  {
+    return m_penalty;
+  }
+  
+  double cost(const int& i,const int& j) const
+  {
+    return (*m_sp_cf)(i,j);
+  }
 
-std::vector<int> cpt_np_max_impl(const std::vector<double>& X,
-				     const std::vector<double>& Q,
-				     const double& beta)
-{
-  changed::cost::np::max cf(X,Q);
-  return run_method(changed::methods::op_pruned<changed::cost::np::max>,cf,beta,X.size());
-}
+  std::vector<int> changepoints()
+  {
+    return run_method(changed::methods::op_pruned<cftype>,*m_sp_cf,m_penalty,m_n);
+  }
 
-
-struct normal_mean
-{
-  std::shared_ptr<changed::cost::normal::mean> sp_cf;
-  normal_mean();
-  void set(const std::vector<double>&);
-  double cost(const int&, const int&) const;
 };
 
 
-normal_mean::normal_mean() {}
-
-void normal_mean::set(const std::vector<double>& X)
-{
-  sp_cf = std::shared_ptr<changed::cost::normal::mean>(new changed::cost::normal::mean(X));
-}
-
-double normal_mean::cost(const int& i,const int& j) const
-{
-  return (*sp_cf)(i,j);      
-}
-
-struct np_conditional
-{
-  std::shared_ptr<changed::cost::np::conditional> sp_cf;
-  np_conditional();
-  void set(const std::vector<double>&,const std::vector<double>&);
-  double cost(const int&, const int&) const; 
-};
-
-
-np_conditional::np_conditional() {}
-
-void np_conditional::set(const std::vector<double>& X, const std::vector<double>& Q)
-{
-  sp_cf = std::shared_ptr<changed::cost::np::conditional>(new changed::cost::np::conditional(X,Q));
-}
-
-double np_conditional::cost(const int& i, const int& j) const
-{
-  return (*sp_cf)(i,j);
-}
-
-
-struct np_average
-{
-  std::shared_ptr<changed::cost::np::average> sp_cf;
-  np_average();
-  void set(const std::vector<double>&,const std::vector<double>&);
-  double cost(const int&, const int&) const; 
-};
-
-
-np_average::np_average() {}
-
-void np_average::set(const std::vector<double>& X, const std::vector<double>& Q)
-{
-  sp_cf = std::shared_ptr<changed::cost::np::average>(new changed::cost::np::average(X,Q));
-}
-
-double np_average::cost(const int& i, const int& j) const
-{
-  return (*sp_cf)(i,j);
-}
-
-
-
-struct np_max
-{
-  std::shared_ptr<changed::cost::np::max> sp_cf;
-  np_max();
-  void set(const std::vector<double>&,const std::vector<double>&);
-  double cost(const int&, const int&) const; 
-};
-
-
-np_max::np_max() {}
-
-void np_max::set(const std::vector<double>& X, const std::vector<double>& Q)
-{
-  sp_cf = std::shared_ptr<changed::cost::np::max>(new changed::cost::np::max(X,Q));
-}
-
-double np_max::cost(const int& i, const int& j) const
-{
-  return (*sp_cf)(i,j);
-}
+typedef model<changed::cost::normal::mean> normal_mean;
+typedef model<changed::cost::np::average> np_average;
+typedef model<changed::cost::np::conditional> np_conditional;
+typedef model<changed::cost::np::max> np_max;
 
 
 RCPP_MODULE(changed){
     using namespace Rcpp;
-    function("cpt_normal_mean_impl",&cpt_normal_mean_impl,"");
-    function("cpt_np_conditional_impl",&cpt_np_conditional_impl,"");
-    function("cpt_np_average_impl",&cpt_np_average_impl,"");
-    function("cpt_np_max_impl",&cpt_np_max_impl,"");
     class_<normal_mean>("normal_mean")
       .constructor()
-      .method("cost", &normal_mean::cost , "get cost")
-      .method("set", &normal_mean::set , "set data")
-    ;
-    class_<np_conditional>("np_conditional")
-      .constructor()
-      .method("cost", &np_conditional::cost , "get cost")
-      .method("set", &np_conditional::set , "set data")
+      .method("cost", &normal_mean::cost ,"cost")
+      .method("setcost", &normal_mean::setcost<std::vector<double> > , "set cost")
+      .method("setpenalty", &normal_mean::setpenalty , "set penalty")
+      .method("penalty", &normal_mean::penalty , "get penalty")
+      .method("changepoints", &normal_mean::changepoints , "get changepoints")
     ;
     class_<np_average>("np_average")
       .constructor()
-      .method("cost", &np_average::cost , "get cost")
-      .method("set", &np_average::set , "set data")
-      ;
+      .method("cost", &np_average::cost ,"cost")
+      .method("setcost", &np_average::setcost<std::vector<double>,std::vector<double> > , "set cost")
+      .method("setpenalty", &np_average::setpenalty , "set penalty")
+      .method("penalty", &np_average::penalty , "get penalty")
+      .method("changepoints", &np_average::changepoints , "get changepoints")
+    ;
+    class_<np_conditional>("np_conditional")
+      .constructor()
+      .method("cost", &np_conditional::cost ,"cost")
+      .method("setcost", &np_conditional::setcost<std::vector<double>,std::vector<double> > , "set cost")
+      .method("setpenalty", &np_conditional::setpenalty , "set penalty")
+      .method("penalty", &np_conditional::penalty , "get penalty")
+      .method("changepoints", &np_conditional::changepoints , "get changepoints")
+    ;
     class_<np_max>("np_max")
       .constructor()
-      .method("cost", &np_max::cost , "get cost")
-      .method("set", &np_max::set , "set data")
-      ;
+      .method("cost", &np_max::cost ,"cost")
+      .method("setcost", &np_max::setcost<std::vector<double>,std::vector<double> > , "set cost")
+      .method("setpenalty", &np_max::setpenalty , "set penalty")
+      .method("penalty", &np_max::penalty , "get penalty")
+      .method("changepoints", &np_max::changepoints , "get changepoints")
+    ;
+	
 }
  
 

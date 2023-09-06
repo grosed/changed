@@ -1,6 +1,9 @@
 
-cpt.normal.mean <- function(X,beta)
+cpt.normal.mean <- function(data,penalty)
 {
-   changepoints <- cpt_normal_mean_impl(X,beta)
-   return(cpt.normal.mean.class(X,beta,changepoints))
+    model <- new(normal_mean)
+    model$setcost(data)
+    model$setpenalty(penalty)
+    results <- create_results(model)
+    return(cpt.class(data,penalty,results,"normal change in mean"))
 }

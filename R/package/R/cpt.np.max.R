@@ -1,7 +1,14 @@
 
-cpt.np.max <- function(X,Q,beta)
+
+
+cpt.np.max <- function(data,quantiles,penalty)
 {
-   
-   changepoints <- cpt_np_max_impl(X,Q,beta)
-   return(cpt.np.max.class(X,Q,beta,changepoints))
+    model <- new(np_max)
+    model$setcost(data,quantiles)
+    model$setpenalty(penalty)
+    results <- create_results(model)
+    return(cpt.np.class(data,penalty,results,quantiles,"non parametric (maximum method)"))
 }
+
+
+

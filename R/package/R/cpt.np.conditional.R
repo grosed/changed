@@ -1,7 +1,12 @@
 
-cpt.np.conditional <- function(X,Q,beta)
+cpt.np.conditional <- function(data,quantiles,penalty)
 {
-   
-   changepoints <- cpt_np_conditional_impl(X,Q,beta)
-   return(cpt.np.conditional.class(X,Q,beta,changepoints))
+    model <- new(np_conditional)
+    model$setcost(data,quantiles)
+    model$setpenalty(penalty)
+    results <- create_results(model)
+    return(cpt.np.class(data,penalty,results,quantiles,"non parametric (conditional method)"))
 }
+
+
+
