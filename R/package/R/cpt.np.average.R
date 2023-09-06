@@ -5,5 +5,5 @@ cpt.np.average <- function(data,quantiles,penalty)
     model$setcost(data,quantiles)
     model$setpenalty(penalty)
     results <- create_results(model)
-    return(cpt.np.class(data,penalty,results,quantiles,"non parametric (average method)"))
+    return(cpt.np.class(data,penalty,results,quantiles,"non parametric cost function (average method)"))
 }

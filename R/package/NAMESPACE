@@ -1,4 +1,13 @@
 useDynLib(changed, .registration=TRUE)
-import(methods, Rcpp)
-exportPattern("^[[:alpha:]]+")
+import(methods, Rcpp,ggplot2)
+# exportPattern("^[[:alpha:]]+")
 exportMethods(changepoints)
+exportMethods(plot)
+exportMethods(summary)
+export(quantiles)
+export(cpt.normal.mean)
+export(cpt.np.average)
+export(cpt.np.conditional)
+export(cpt.np.max)
+
+
